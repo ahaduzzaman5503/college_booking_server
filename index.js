@@ -64,6 +64,19 @@ async function run() {
             res.status(500).send("Error while fetching data from MongoDB");
           }
       });
+      
+      app.get("/admissiondata", async (req, res) => {
+          try {
+            const cursor = admissionDataCollection.find();
+            const result = await cursor.toArray();
+            res.send(result);
+        }  catch (error) {
+            console.error("Error while fetching data from MongoDB:", error);
+            res.status(500).send("Error while fetching data from MongoDB");
+          }
+      });
+ 
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
