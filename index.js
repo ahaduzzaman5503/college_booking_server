@@ -25,7 +25,7 @@ async function run() {
     await client.connect();
     const allCollageDatabase = client.db("allCollage");
     const allCollageCollection = allCollageDatabase.collection("collegesdata");
-
+    
     app.get("/allcollages", async (req, res) => {
       try {
         const cursor = allCollageCollection.find();
@@ -36,14 +36,29 @@ async function run() {
         res.status(500).send("Error while fetching data from MongoDB");
       }
     });
-
+    
     app.get("/allcollages/:id", async(req, res) => {
-        try {
-            const id = req.params.id;
-            const query = {_id: new ObjectId(id)};
-            const result = await allCollageCollection.findOne(query);
-            res.send(result)
-            console.log(result);
+      try {
+        const id = req.params.id;
+        const query = {_id: new ObjectId(id)};
+        const result = await allCollageCollection.findOne(query);
+        res.send(result)
+        console.log(result);
+      }  catch (error) {
+            console.error("Error while fetching data from MongoDB:", error);
+            res.status(500).send("Error while fetching data from MongoDB");
+          }
+        });
+        
+        const admissionDatabase = client.db("admission");
+        const admissionDataCollection = admissionDatabase.collection("admissiondata");
+        
+        app.post("/admissiondata", async (req, res) => {
+          try {
+          const cardata = req.body;
+          console.log("new car data", cardata);
+          const result = await admissionDataCollection.insertOne(cardata);
+          res.send(result);
         }  catch (error) {
             console.error("Error while fetching data from MongoDB:", error);
             res.status(500).send("Error while fetching data from MongoDB");
