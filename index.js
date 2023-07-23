@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 require("dotenv").config();
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 const port = process.env.PORT || 5000;
 
@@ -36,6 +36,19 @@ async function run() {
         res.status(500).send("Error while fetching data from MongoDB");
       }
     });
+
+    app.get("/allcollages/:id", async(req, res) => {
+        try {
+            const id = req.params.id;
+            const query = {_id: new ObjectId(id)};
+            const result = await allCollageCollection.findOne(query);
+            res.send(result)
+            console.log(result);
+        }  catch (error) {
+            console.error("Error while fetching data from MongoDB:", error);
+            res.status(500).send("Error while fetching data from MongoDB");
+          }
+      });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
