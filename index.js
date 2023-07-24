@@ -49,6 +49,19 @@ async function run() {
             res.status(500).send("Error while fetching data from MongoDB");
           }
         });
+
+    app.get("/allcollages/:id", async(req, res) => {
+      try {
+        const id = req.params.id;
+        const query = {college_name};
+        const result = await allCollageCollection.findOne(query);
+        res.send(result)
+        console.log(result);
+      }  catch (error) {
+            console.error("Error while fetching data from MongoDB:", error);
+            res.status(500).send("Error while fetching data from MongoDB");
+          }
+        });
         
         const admissionDatabase = client.db("admission");
         const admissionDataCollection = admissionDatabase.collection("admissiondata");
